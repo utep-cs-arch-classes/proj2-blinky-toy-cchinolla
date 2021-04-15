@@ -7,8 +7,6 @@
 
 
 
-
-
 char toggle_red()		/* always toggle! */
 {
   static char state = 0;
@@ -63,6 +61,7 @@ char toggle_both(){
   return 1;
 }
 
+/*
 char turn_off(){
   red_on = 0;
   green_on = 0;
@@ -70,6 +69,7 @@ char turn_off(){
   led_update();
   return 1;
 }
+*/
 
 void dim25(){
   char changed_led = 0;
@@ -146,7 +146,7 @@ void dim75(){
   led_update();
 }
 
-dim(){
+void dim(){
   static char dimS = 0;
   switch(dimS){
   case 0:
@@ -162,19 +162,47 @@ dim(){
     dimS = 0;
     break;
   }
+  
 }
+
+void dimTest(){
+  static char s = 0;
+  switch(s){
+  case 0:
+    red_on = 1;
+    green_on = 1;
+    s = 1;
+    break;
+  case 1:
+    red_on = 0;
+    green_on = 0;
+    s = 0;
+    break;
+  }
+  led_changed = 1;
+  led_update();
+}
+
+
+
 
 void state_advance()		/* alternate between toggling red & green */
 {
   char changed = 0;
   switch(state){
   case 1:
-    changed = toggle_red(); break;
+    // changed = toggle_red(); break;
+    red_on = 1;
+    green_on = 1;
+    changed = 1;
+    break;
   case 2:
-    changed = toggle_green(); break;
-  case 3:
     changed = toggle_both();
     mario();
+    break;
+  case 3:
+    dimTest();
+    changed = 1;
     break;
   case 4:
     changed = turn_off();
